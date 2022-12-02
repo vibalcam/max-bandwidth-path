@@ -110,6 +110,7 @@ public class Dijkstra {
         }
     }
 
+    // imp use a double linked list so it can be deleted in constant time, or keep in memory last value
     private int getMaxFringer(LinkedList[] g, int[] status) {
         int max = -1;
         double maxVal = 0;

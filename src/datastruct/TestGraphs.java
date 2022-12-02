@@ -25,7 +25,7 @@ public class TestGraphs {
      * <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Wikipedia</a>
      *
      * Basic explanation:
-     * The algorithm randomly chooses an unsampled element and move it of the list by swapping
+     * The algorithm randomly chooses an unsampled element and move it to the end of the list by swapping
      * it with the last unsampled element at each iteration
      *
      * @param x the array to shuffle
@@ -169,6 +169,7 @@ public class TestGraphs {
         return adjList;
     }
 
+    // imp make faster
     public static LinkedList[] getGraph2(int nVertices, long seed) {
         // get random cycle
         LinkedList[] adjList = getRandomCycle(nVertices, seed);
@@ -197,7 +198,6 @@ public class TestGraphs {
         double w;
         Random rdm = new Random(seed);
         int j, size, tmp;
-        boolean cycled = false;
         // for each node
         for (int i=0; i< adjList.length; i++) {
 //            System.out.println(i);
@@ -232,14 +232,10 @@ public class TestGraphs {
                     size = l2.size();
 
                     // if already did a cycle, break
-                    if(tmp == j) {
-                        cycled = true;
-                        break;
-                    }
+                    // once cycled it means all vertices already have the required amount of neighbors
+                    if(tmp == j)
+                        return adjList;
                 }
-                // once cycled it means all vertices already have the required amount of neighbors
-                if(cycled)
-                    break;
 
                 // when element is not adjacent, add edge
                 l1.add(j, w);
@@ -247,11 +243,8 @@ public class TestGraphs {
                 l2.add(i, w);
                 adjMatrix[j][i] = 1;
             }
-            // once cycled it means all vertices already have the required amount of neighbors
-            if(cycled)
-                break;
         }
-        return  adjList;
+        return adjList;
     }
 
 //    public static LinkedList[] getGraph2(int nVertices, long seed) {

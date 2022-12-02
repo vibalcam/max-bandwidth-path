@@ -5,9 +5,7 @@ import datastruct.MaxHeap;
 import datastruct.UnionFind;
 
 public class Kruskal {
-    // imp use another sorting algorithm instead of heapsort (merge sort O(n log n)) linear time sorting
-
-    // todo finish
+    // imp use another sorting algorithm instead of heapsort (linear time sorting)
 
     // maximum spanning tree
     private final LinkedList[] maxSpanningTree;
@@ -29,16 +27,17 @@ public class Kruskal {
     private void maxSpanningTree(LinkedList[] g) {
         int n = g.length;
         UnionFind unionFind = new UnionFind(n);
+
         // get list of edge
-        double[] edges_weights = new double[n * (n-1)];
-        Edge[] edges_info = new Edge[n * (n-1)];
+        double[] edges_weights = new double[(int)(n * (n-1)/2)];
+        Edge[] edges_info = new Edge[edges_weights.length];
 
         int m = 0;
         LinkedList.Node current;
         for(int k=0; k< n; k++){
             current = g[k].head;
             while(current != null) {
-                // make sure no duplicates by only adding when i < j
+                // make sure no duplicates by only adding when i > j
                 if(k >= current.data) {
                     current = current.next;
                     continue;

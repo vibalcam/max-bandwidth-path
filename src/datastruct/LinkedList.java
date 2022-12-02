@@ -4,6 +4,11 @@ public class LinkedList {
     public Node head;
     private int size;
 
+    public LinkedList() {
+        head = null;
+        size = 0;
+    }
+
     public static class Node {
         public int data;
         public double weight;
@@ -14,11 +19,6 @@ public class LinkedList {
             this.next = next;
             this.weight = weight;
         }
-    }
-
-    public LinkedList() {
-        head = null;
-        size = 0;
     }
 
     /**
@@ -73,9 +73,10 @@ public class LinkedList {
      * @param idx the index of the node to delete
      */
     public void delete(int idx) { // O(n)
-        // if deleting head, set null
+        // if deleting head, set head to next
         if(idx == 0 && head != null) {
-            head = null;
+            head = head.next;
+            size--;
             return;
         }
         // otherwise get node and delete

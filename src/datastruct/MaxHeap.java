@@ -18,12 +18,30 @@ public class MaxHeap {
         values = new double[size];
     }
 
+    public MaxHeap(double[] arr, int length) {
+        this.heap = new int[length];
+        this.position = new int[length];
+        this.values = new double[length];
+        for (int i = 0; i < length; i++) {
+            heap[i] = i;
+            position[i] = i;
+            this.values[i] = arr[i];
+        }
+        this.last = length - 1;
+
+        // convert array into max heap using max heapify
+        // leaves are already max heap, start with the
+        // parent of the last leaf and "fix" the array
+        for(int i=getParent(last); i>=0; i--)
+            maxHeapify(i);
+    }
+
     /**
      * Returns the maximum value element
      * @return maximum value element
      */
     public int max() { // O(1)
-        if(last < 0)
+        if(isEmpty())
             throw new IndexOutOfBoundsException();
         return heap[0];
     }
@@ -55,7 +73,7 @@ public class MaxHeap {
 
     /**
      * This function inserts a new element
-     * 
+     *
      * @param x the element to insert
      */
     public void add(int x, double value) { // O(log n)
@@ -79,7 +97,7 @@ public class MaxHeap {
 
     /**
      * This function deletes the element at index i
-     * 
+     *
      * @param idx the index of the item to be deleted
      */
     public void deleteIndex(int idx) { // O(log n)
@@ -149,10 +167,9 @@ public class MaxHeap {
      * @param x the element to be deleted
      */
     public void deleteElement(int x) { // O(log n)
-        // imp check if element is in heap (position index 0 non existant + 1 exists)
         deleteIndex(position[x]);
     }
-
+    // imp check if element is in heap (position index 0 non existant + 1 exists)
 
     /**
      * Swap the elements at indices i1 and i2 in the heap
@@ -204,6 +221,31 @@ public class MaxHeap {
         return 2 * i + 2;
     }
 
+    private void maxHeapify(int idx) {
+        // get index for left and right children
+        int l = getLeft(idx);
+        int r = getRight(idx);
+        int largest;
+        double largestValue;
+        // if left largest than parent
+        if(l <= last && getValueIndex(l) > getValueIndex(idx)) {
+            largest = l;
+            largestValue = getValueIndex(l);
+        } else {
+            largest = idx;
+            largestValue = getValueIndex(idx);
+        }
+        // if right largest than left child and parent
+        if(r <= last && getValueIndex(r) > largestValue)
+            largest = r;
+
+        // if largest is not parent, then swap and iterate
+        if(largest != idx) {
+            swap(idx, largest);
+            maxHeapify(largest);
+        }
+    }
+
     /**
      * Sort the array using heapsort.
      * Build a max heap, then pop the max element n times.
@@ -214,19 +256,13 @@ public class MaxHeap {
      * @return The indices of the given array sorted
      */
     public static int[] heapSort(double[] values, int length, boolean asc) { // O(n log n)
-//        todo use implementation from book build heap
-//        int[] indices = new int[values.length];
-//        int[] position = new int[values.length];
-//        for (int i = 0; i < indices.length; i++) {
-//            indices[i] = i;
-//            position[i] = i;
-//        }
-//        MaxHeap maxHeap = new MaxHeap(indices, values, position);
+        // build the max heap O(n)
+        MaxHeap maxHeap = new MaxHeap(values, length);
 
         // build the max heap O(n log n)
-        MaxHeap maxHeap = new MaxHeap(length);
-        for(int k=0; k < length; k++)    // n times
-            maxHeap.add(k, values[k]); // O(log n)
+        // MaxHeap maxHeap = new MaxHeap(length);
+        // for(int k=0; k < length; k++)    // n times
+        //     maxHeap.add(k, values[k]); // O(log n)
 
         // for each element in tree get max and delete O(n log n)
         int[] sorted = new int[length];
@@ -262,6 +298,7 @@ public class MaxHeap {
 
         // test heapsort
         double[] test = {3,4,2,0,1};
+        System.out.println("Solution asc: 3,4,2,0,1");
         System.out.println(Arrays.toString(heapSort(test, test.length, true)));
         System.out.println(Arrays.toString(heapSort(test, test.length, false)));
     }
